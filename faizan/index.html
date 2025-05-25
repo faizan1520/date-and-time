@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Date & Time Tasks</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    section {
+      margin-bottom: 30px;
+    }
+
+    label,
+    input {
+      display: block;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Date & Time Tasks</h1>
+
+  <section id="current-date">
+    <h2>Current Date (DD/MM/YYYY)</h2>
+    <div id="date-output"></div>
+  </section>
+
+  <section id="current-time">
+    <h2>Current Time (HH:MM:SS)</h2>
+    <div id="time-output"></div>
+  </section>
+
+  <section id="greetings">
+    <h2>Greetings Based on Time</h2>
+    <div id="greeting-output"></div>
+  </section>
+
+  <section id="age-calculator">
+    <h2>Age Calculator</h2>
+    <label for="dob">Enter your Date of Birth:</label>
+    <input type="date" id="dob" />
+    <button onclick="calculateAge()">Calculate Age</button>
+    <div id="age-output"></div>
+  </section>
+
+  <section id="countdown">
+    <h2>Countdown Timer to New Year (1 Jan next year)</h2>
+    <div id="countdown-output"></div>
+  </section>
+
+  <section id="date-formatter">
+    <h2>Date Formatter Function</h2>
+    <label for="format-date">Enter any date:</label>
+    <input type="date" id="format-date" />
+    <button onclick="formatDateFunc()">Format Date</button>
+    <div id="formatted-date-output"></div>
+  </section>
+
+  <section id="days-passed">
+    <h2>Days Passed Since a Date</h2>
+    <label for="past-date">Enter past date:</label>
+    <input type="date" id="past-date" />
+    <button onclick="calculateDaysPassed()">Calculate Days Passed</button>
+    <div id="days-passed-output"></div>
+  </section>
+
+  <section id="weekend-checker">
+    <h2>Weekend Checker</h2>
+    <label for="check-weekend-date">Enter any date:</label>
+    <input type="date" id="check-weekend-date" />
+    <button onclick="checkWeekend()">Check if Weekend</button>
+    <div id="weekend-output"></div>
+  </section>
+
+  <section id="fridays-count">
+    <h2>How Many Fridays in a Month</h2>
+    <label for="friday-month">Select Month and Year:</label>
+    <input type="month" id="friday-month" />
+    <button onclick="countFridays()">Count Fridays</button>
+    <div id="fridays-output"></div>
+  </section>
+
+  <section id="birthday-reminder">
+    <h2>Birthday Reminder</h2>
+    <label for="fixed-birthday">Enter Birthday (Day & Month only):</label>
+    <input type="month" id="fixed-birthday" />
+    <button onclick="birthdayReminder()">Check Birthday</button>
+    <div id="birthday-output"></div>
+  </section>
+
+  <script>
+
+    function showCurrentDate() {
+      const now = new Date();
+      const day = String(now.getDate()).padStart(2, '0');
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const year = now.getFullYear();
+      document.getElementById('date-output').textContent = `${day}/${month}/${year}`;
+    }
+
+    function showCurrentTime() {
+      const now = new Date();
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      const s = String(now.getSeconds()).padStart(2, '0');
+      document.getElementById('time-output').textContent = `${h}:${m}:${s}`;
+    }
+
+    function showGreeting() {
+      const now = new Date();
+      const h = now.getHours();
+      let greeting = '';
+      if (h >= 5 && h < 12) greeting = "Good Morning";
+      else if (h >= 12 && h < 17) greeting = "Good Afternoon";
+      else if (h >= 17 && h < 21) greeting = "Good Evening";
+      else greeting = "Good Night";
+      document.getElementById('greeting-output').textContent = greeting;
+    }
+
+    function calculateAge() {
+      const dobInput = document.getElementById('dob').value;
+      if (!dobInput) {
+        alert("Please enter your date of birth.");
+        return;
+      }
+      const dob = new Date(dobInput);
+      const now = new Date();
+      let age = now.getFullYear() - dob.getFullYear();
+      const m = now.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && now.getDate() < dob.getDate())) {
+        age--;
+      }
+      document.getElementById('age-output').textContent = `Your age is ${age} years.`;
+    }
+
+    function updateCountdown() {
+      const now = new Date();
+      const year = now.getFullYear();
+
+      const newYear = new Date(year + 1, 0, 1);
+      const diff = newYear - now;
+      if (diff <= 0) {
+        document.getElementById('countdown-output').textContent = "Happy New Year!";
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      document.getElementById('countdown-output').textContent =
+        `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds left`;
+    }
+
+
+    function formatDateFunc() {
+      const dateInput = document.getElementById('format-date').value;
+      if (!dateInput) {
+        alert("Please enter a date.");
+        return;
+      }
+      const d = new Date(dateInput);
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      const dayName = days[d.getDay()];
+      const dayNum = d.getDate();
+      const monthName = months[d.getMonth()];
+      const year = d.getFullYear();
+      const formatted = `${dayName}, ${dayNum} ${monthName} ${year}`;
+      document.getElementById('formatted-date-output').textContent = formatted;
+    }
+
+
+    function calculateDaysPassed() {
+      const pastDateInput = document.getElementById('past-date').value;
+      if (!pastDateInput) {
+        alert("Please enter a past date.");
+        return;
+      }
+      const pastDate = new Date(pastDateInput);
+      const now = new Date();
+      if (pastDate > now) {
+        alert("Entered date is in the future. Please enter a past date.");
+        return;
+      }
+      const diff = now - pastDate;
+      const daysPassed = Math.floor(diff / (1000 * 60 * 60 * 24));
+      document.getElementById('days-passed-output').textContent = `${daysPassed} days have passed since ${pastDateInput}`;
+    }
+
+
+    function checkWeekend() {
+      const dateInput = document.getElementById('check-weekend-date').value;
+      if (!dateInput) {
+        alert("Please enter a date.");
+        return;
+      }
+      const d = new Date(dateInput);
+      const day = d.getDay();
+      const isWeekend = (day === 0 || day === 6);
+      document.getElementById('weekend-output').textContent = isWeekend ? "It's Weekend (Saturday or Sunday)" : "It's a Weekday";
+    }
+
+
+    function countFridays() {
+      const monthInput = document.getElementById('friday-month').value;
+      if (!monthInput) {
+        alert("Please select a month and year.");
+        return;
+      }
+      const [year, month] = monthInput.split('-').map(Number);
+      let fridaysCount = 0;
+
+      const date = new Date(year, month - 1, 1);
+      while (date.getMonth() === month - 1) {
+        if (date.getDay() === 5) fridaysCount++;
+        date.setDate(date.getDate() + 1);
+      }
+      document.getElementById('fridays-output').textContent = `Number of Fridays in ${month}/${year}: ${fridaysCount}`;
+    }
+
+
+    function birthdayReminder() {
+      const birthdayInput = document.getElementById('fixed-birthday').value;
+      if (!birthdayInput) {
+        alert("Please enter birthday month and day.");
+        return;
+      };
+      
+      const now = new Date();
+      const [year, month] = birthdayInput.split('-').map(Number);
+      const thisYearBirthday = new Date(now.getFullYear(), month - 1, 1);
+
+      alert("Note: For birthday reminder, input only month is taken, day is assumed 1.");
+      const birthdayDate = new Date(now.getFullYear(), month - 1, 1);
+      let daysLeft = 0;
+
+      if (birthdayDate < now) {
+        const nextYearBirthday = new Date(now.getFullYear() + 1, month - 1, 1);
+        daysLeft = Math.ceil((nextYearBirthday - now) / (1000 * 60 * 60 * 24));
+        document.getElementById('birthday-output').textContent = `Birthday passed this year. Next birthday in ${daysLeft} days.`;
+      } else {
+        daysLeft = Math.ceil((birthdayDate - now) / (1000 * 60 * 60 * 24));
+        document.getElementById('birthday-output').textContent = `Birthday is coming in ${daysLeft} days.`;
+      }
+
+    };
+
+
+    showCurrentDate();
+    showCurrentTime();
+    showGreeting();
+    setInterval(showCurrentTime, 1000);
+    setInterval(updateCountdown, 1000);
+
+
+  </script>
+
+</body>
+
+</html>
